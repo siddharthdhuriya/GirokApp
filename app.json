@@ -1,25 +1,46 @@
 {
   "expo": {
-    "name": "GirokApp",
-    "slug": "GirokApp",
+    "name": "Girok",
+    "slug": "girok",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
+    "scheme": "girok",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.girok.app"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#090B11"
       },
-      "predictiveBackGestureEnabled": false
+      "package": "com.girok.app",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD1XdJG3tO_o8O1BSJZx-VMokru276jvNQ"
+        }
+      }
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Girok needs camera access to scan boarding passes and tickets."
+        }
+      ],
+      "expo-font",
+      [
+        "react-native-maps",
+        {
+          "googleMapsApiKey": "AIzaSyD1XdJG3tO_o8O1BSJZx-VMokru276jvNQ"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
     }
   }
 }

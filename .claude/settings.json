@@ -1,4 +1,14 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(Remove-Item \"c:\\\\Users\\\\Siddharth\\\\exp\\\\GirokApp\\\\App.tsx\" -Force)",
+      "Bash(Remove-Item \"c:\\\\Users\\\\Siddharth\\\\exp\\\\GirokApp\\\\index.ts\" -Force)",
+      "Read(//c/Users/Siddharth/.claude/projects/c--Users-Siddharth-exp-GirokApp/memory/**)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Siddharth\\.claude\\projects\\c--Users-Siddharth-exp-GirokApp\\memory"
+    ]
+  },
   "enabledPlugins": {
     "expo@claude-plugins-official": true
   }
