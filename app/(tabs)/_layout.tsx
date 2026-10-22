@@ -1,10 +1,10 @@
 import React from 'react';
-import { Tabs, router } from 'expo-router';
+import { Tabs, router, Redirect } from 'expo-router';
 import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type BottomTabBarProps = any;
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import Icon from '@/components/Icon';
 import { Colors, Radii } from '@/theme';
+import { useApp } from '@/context/AppContext';
 
 const TABS = [
   { name: 'index',   label: 'Home',  icon: 'compass' },
@@ -60,6 +60,9 @@ function GirokTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 }
 
 export default function TabLayout() {
+  const { user, loading } = useApp();
+  // Once auth resolves, keep signed-out users out of the app area
+  if (!loading && !user) return <Redirect href="/welcome" />;
   return (
     <Tabs tabBar={(props) => <GirokTabBar {...props} />} screenOptions={{ headerShown: false }}>
       <Tabs.Screen name="index"   options={{ title: 'Home'    }} />

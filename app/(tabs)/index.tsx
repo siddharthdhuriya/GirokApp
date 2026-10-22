@@ -59,7 +59,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.iconBtn}><Icon name="bell" size={20} color={Colors.text} /></TouchableOpacity>
-          <Avatar size={42} onPress={() => router.push('/(tabs)/profile')} />
+          <Avatar size={42} letter={displayName[0]?.toUpperCase()} onPress={() => router.push('/(tabs)/profile')} />
         </View>
       </View>
 

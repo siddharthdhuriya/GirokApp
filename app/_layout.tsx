@@ -19,6 +19,8 @@ export default function RootLayout() {
             <Stack.Screen name="welcome" />
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="trip/[id]" options={{ presentation: 'card', animation: 'slide_from_right' }} />
+            <Stack.Screen name="trip/edit/[id]" options={{ presentation: 'fullScreenModal', animation: 'slide_from_bottom' }} />
+            <Stack.Screen name="settings" options={{ presentation: 'card', animation: 'slide_from_right' }} />
             <Stack.Screen name="add" options={{ presentation: 'fullScreenModal', animation: 'slide_from_bottom' }} />
           </Stack>
         </BottomSheetModalProvider>

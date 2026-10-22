@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
-  KeyboardAvoidingView, Platform, Animated, ActivityIndicator,
+  KeyboardAvoidingView, Platform, Animated, ActivityIndicator, Alert,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,7 +24,7 @@ type AuthMode = null | 'signup' | 'login';
 
 export default function WelcomeScreen() {
   const insets = useSafeAreaInsets();
-  const { signIn, signUp } = useApp();
+  const { signIn, signUp, resetPassword } = useApp();
   const [mode, setMode] = useState<AuthMode>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -51,6 +51,15 @@ export default function WelcomeScreen() {
     setBusy(false);
     if (err) { setError(err); return; }
     router.replace('/(tabs)');
+  }
+  async function handleForgot() {
+    if (!email.trim()) { setError('Enter your email above, then tap "Forgot password?" again.'); return; }
+    setBusy(true);
+    setError(null);
+    const err = await resetPassword(email.trim());
+    setBusy(false);
+    if (err) setError(err);
+    else Alert.alert('Check your inbox', `A password reset link was sent to ${email.trim()}.`);
   }
 
   return (
@@ -115,7 +124,7 @@ export default function WelcomeScreen() {
                     secureTextEntry />
                 </View>
                 {mode === 'login' && (
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={handleForgot} disabled={busy}>
                     <Text style={styles.forgot}>Forgot password?</Text>
                   </TouchableOpacity>
                 )}

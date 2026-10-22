@@ -41,7 +41,7 @@ export default function ProfileScreen() {
       {/* Header */}
       <View style={[styles.topbar, { paddingTop: insets.top + 6 }]}>
         <Text style={styles.heading}>Profile</Text>
-        <TouchableOpacity style={styles.iconBtn} onPress={() => router.push('/settings' as any)}>
+        <TouchableOpacity style={styles.iconBtn} onPress={() => router.push('/settings')}>
           <Icon name="settings" size={20} color={Colors.text} />
         </TouchableOpacity>
       </View>
@@ -49,7 +49,7 @@ export default function ProfileScreen() {
       <View style={{ paddingHorizontal: 20 }}>
         {/* Identity */}
         <View style={[styles.row, { gap: 15, marginBottom: 4 }]}>
-          <Avatar size={66} />
+          <Avatar size={66} letter={displayName[0]?.toUpperCase()} />
           <View style={{ flex: 1 }}>
             <Text style={styles.name}>{displayName}</Text>
             <Text style={styles.handle}>{user?.email ?? PROFILE.handle}</Text>

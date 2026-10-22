@@ -10,11 +10,11 @@
     "babel-plugin-module-resolver": "^5.0.3",
     "babel-preset-expo": "^56.0.14",
     "expo": "~56.0.8",
-    "expo-barcode-scanner": "^13.0.1",
     "expo-camera": "~56.0.7",
     "expo-font": "~56.0.5",
     "expo-haptics": "~56.0.3",
     "expo-linear-gradient": "~56.0.4",
+    "expo-linking": "56.0.19",
     "expo-router": "~56.2.8",
     "expo-status-bar": "~56.0.4",
     "react": "19.2.3",
@@ -24,7 +24,8 @@
     "react-native-reanimated": "4.3.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "4.25.2",
-    "react-native-svg": "15.15.4"
+    "react-native-svg": "15.15.4",
+    "react-native-worklets": "0.8.3"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",

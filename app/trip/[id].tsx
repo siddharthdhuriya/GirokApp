@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, Share } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
@@ -15,7 +15,7 @@ export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
   const { trips, deleteTrip } = useApp();
-  const trip = trips.find(t => t.id === id)!;
+  const trip = trips.find(t => t.id === id);
   if (!trip) {
     return (
       <View style={styles.screen}>
@@ -31,7 +31,13 @@ export default function TripDetailScreen() {
   const coords = greatCircleCoords(trip.from, trip.to);
   const region = routeRegion(trip.from, trip.to);
 
-  function confirmDelete() {
+  const share = () => {
+    Share.share({
+      message: `${m.verb} ${CITIES[trip.from].city} → ${CITIES[trip.to].city} (${fmt.kmFull(trip.dist)} km) on ${fmt.date(trip.date)} · logged with Girok`,
+    });
+  };
+
+  const confirmDelete = () => {
     Alert.alert('Delete this trip?',
       `${CITIES[trip.from].city} → ${CITIES[trip.to].city} will be removed. This can't be undone.`,
       [
@@ -39,7 +45,7 @@ export default function TripDetailScreen() {
         { text: 'Delete', style: 'destructive', onPress: () => { deleteTrip(trip.id); router.back(); } },
       ]
     );
-  }
+  };
 
   return (
     <View style={styles.screen}>
@@ -64,8 +70,8 @@ export default function TripDetailScreen() {
             <Icon name="arrowLeft" size={20} color="#fff" />
           </TouchableOpacity>
           <View style={styles.heroRight}>
-            <TouchableOpacity style={styles.heroBtn}><Icon name="share" size={19} color="#fff" /></TouchableOpacity>
-            <TouchableOpacity style={styles.heroBtn}><Icon name="edit" size={19} color="#fff" /></TouchableOpacity>
+            <TouchableOpacity style={styles.heroBtn} onPress={share}><Icon name="share" size={19} color="#fff" /></TouchableOpacity>
+            <TouchableOpacity style={styles.heroBtn} onPress={() => router.push(`/trip/edit/${trip.id}`)}><Icon name="edit" size={19} color="#fff" /></TouchableOpacity>
           </View>
         </View>
       </View>
@@ -89,7 +95,7 @@ export default function TripDetailScreen() {
           </View>
         )}
 
-        <TouchableOpacity style={styles.shareBtn} activeOpacity={0.8}>
+        <TouchableOpacity style={styles.shareBtn} onPress={share} activeOpacity={0.8}>
           <Icon name="share" size={18} color={Colors.text} />
           <Text style={styles.shareBtnText}>Share this trip</Text>
         </TouchableOpacity>

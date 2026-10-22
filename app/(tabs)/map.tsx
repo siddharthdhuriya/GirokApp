@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Share } from 'react-native';
 import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -52,20 +52,21 @@ export default function MapScreen() {
         showsCompass={false}
         showsScale={false}
         toolbarEnabled={false}
+        onPress={() => setSelected(null)}
       >
         {shown.map(t => {
           const coords = greatCircleCoords(t.from, t.to);
           const m = TypeMeta[t.type];
           const isSel = selected?.id === t.id;
-          const fade = selected && !isSel ? 0.18 : 1;
+          // dim non-selected routes by baking alpha into the stroke colour
+          const stroke = selected && !isSel ? m.color + '2E' : m.color;
           return (
             <React.Fragment key={t.id}>
               {/* glow */}
-              <Polyline coordinates={coords} strokeColor={m.color} strokeWidth={isSel ? 5 : 3.5}
-                strokeColors={[m.color]} lineDashPattern={undefined} tappable
-                onPress={() => selectTrip(t)} />
+              <Polyline coordinates={coords} strokeColor={stroke} strokeWidth={isSel ? 5 : 3.5}
+                tappable onPress={() => selectTrip(t)} />
               {/* crisp line */}
-              <Polyline coordinates={coords} strokeColor={m.color} strokeWidth={isSel ? 2.2 : 1.5}
+              <Polyline coordinates={coords} strokeColor={stroke} strokeWidth={isSel ? 2.2 : 1.5}
                 tappable onPress={() => selectTrip(t)} />
               <Marker coordinate={{ latitude: CITIES[t.from].ll[0], longitude: CITIES[t.from].ll[1] }}
                 onPress={() => selectTrip(t)} anchor={{ x: 0.5, y: 0.5 }}>
@@ -109,7 +110,7 @@ export default function MapScreen() {
       {selected && (
         <View style={[styles.sheet, { paddingBottom: insets.bottom + 20 }]}>
           <View style={styles.sheetGrab} />
-          <RouteDetail trip={selected} onClose={() => setSelected(null)} onOpen={() => router.push(`/trip/${selected.id}`)} />
+          <RouteDetail trip={selected} onOpen={() => router.push(`/trip/${selected.id}`)} />
         </View>
       )}
     </View>
@@ -129,8 +130,13 @@ function FilterChip({ label, active, dotColor, onPress }: { label: string; activ
   );
 }
 
-function RouteDetail({ trip: t, onClose, onOpen }: { trip: Trip; onClose: () => void; onOpen: () => void }) {
+function RouteDetail({ trip: t, onOpen }: { trip: Trip; onOpen: () => void }) {
   const m = TypeMeta[t.type];
+  function share() {
+    Share.share({
+      message: `${TypeMeta[t.type].verb} ${CITIES[t.from].city} → ${CITIES[t.to].city} (${fmt.kmFull(t.dist)} km) on ${fmt.date(t.date)} · logged with Girok`,
+    });
+  }
   return (
     <View style={{ paddingHorizontal: 20 }}>
       <View style={[styles.row, { gap: 10, marginBottom: 16 }]}>
@@ -164,7 +170,7 @@ function RouteDetail({ trip: t, onClose, onOpen }: { trip: Trip; onClose: () => 
         <TouchableOpacity style={styles.btnGhost} onPress={onOpen} activeOpacity={0.8}>
           <Text style={styles.btnGhostText}>View full trip</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnShare} onPress={onClose} activeOpacity={0.8}>
+        <TouchableOpacity style={styles.btnShare} onPress={share} activeOpacity={0.8}>
           <Icon name="share" size={19} color={Colors.text} />
         </TouchableOpacity>
       </View>

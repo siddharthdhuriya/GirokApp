@@ -52,6 +52,8 @@ interface AppContextValue {
   signIn: (email: string, password: string) => Promise<string | null>;
   signUp: (email: string, password: string, name?: string) => Promise<string | null>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<string | null>;
+  updateName: (name: string) => Promise<string | null>;
   displayName: string;
   // kept for backward compat with existing screens
   isAuthenticated: boolean;
@@ -162,11 +164,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     await supabase.auth.signOut();
   }, []);
 
+  const resetPassword = useCallback(async (email: string): Promise<string | null> => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    return error?.message ?? null;
+  }, []);
+
+  const updateName = useCallback(async (name: string): Promise<string | null> => {
+    const { data, error } = await supabase.auth.updateUser({ data: { full_name: name } });
+    if (!error && data.user) setUser(data.user);
+    return error?.message ?? null;
+  }, []);
+
   return (
     <AppContext.Provider value={{
       trips, stats, loading, user, displayName,
       addTrip, updateTrip, deleteTrip,
-      signIn, signUp, signOut,
+      signIn, signUp, signOut, resetPassword, updateName,
       isAuthenticated: user !== null,
       setAuthenticated: () => {},
     }}>

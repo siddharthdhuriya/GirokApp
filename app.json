@@ -9,7 +9,10 @@
     "scheme": "girok",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.girok.app"
+      "bundleIdentifier": "com.girok.app",
+      "config": {
+        "googleMapsApiKey": "AIzaSyD1XdJG3tO_o8O1BSJZx-VMokru276jvNQ"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +38,8 @@
       [
         "react-native-maps",
         {
-          "googleMapsApiKey": "AIzaSyD1XdJG3tO_o8O1BSJZx-VMokru276jvNQ"
+          "iosGoogleMapsApiKey": "AIzaSyD1XdJG3tO_o8O1BSJZx-VMokru276jvNQ",
+          "androidGoogleMapsApiKey": "AIzaSyD1XdJG3tO_o8O1BSJZx-VMokru276jvNQ"
         }
       ]
     ],
